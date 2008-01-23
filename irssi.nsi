@@ -216,10 +216,10 @@ SectionEnd
 
 Section -InstallEssentials
   SetOutPath "$INSTDIR"
-;  File /r "${SRC_DIR}\bin"
-;  File /r "${SRC_DIR}\lib"
-;  File /r "${SRC_DIR}\share"
-;  File /r "${SRC_DIR}\terminfo"
+  File /r "${SRC_DIR}\bin"
+  File /r "${SRC_DIR}\lib"
+  File /r "${SRC_DIR}\share"
+  File /r "${SRC_DIR}\terminfo"
 
   ; Copy cygwin1.dll from Cygwin to avoid version conflicts
   ReadRegStr $CygwinFolder HKCU "Software\Cygnus Solutions\Cygwin\mounts v2\/" "native"
