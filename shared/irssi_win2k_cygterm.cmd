@@ -1,3 +1,3 @@
 @ECHO OFF
-SET PATH=bin
-START puttycyg.exe -cygterm run_with_home.cmd
+CALL bin\run_with_home.cmd
+START bin\puttycyg.exe -cygterm "bin/irssi.exe \"--home=%IRSSI_HOME%\""

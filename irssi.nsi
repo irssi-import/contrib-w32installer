@@ -22,7 +22,7 @@
 !define APP_VER_FULL "0.8.12"
 !define APP_VER_INFO "0.8.12.1"
 !define APP_VER_FILE "0_8_12"
-!define APP_PKG_RELEASE "1"
+!define APP_PKG_RELEASE "2"
 !define SRC_DIR "irssi-win32-0.8.12"
 !define EXTRA_SHARED "shared"
 
@@ -53,7 +53,6 @@
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "${APP_NAME_FULL}"
 
 SetCompressor /solid lzma
-!packhdr exehead.tmp "upx.exe --best --compress-icons=0 --nrv2e --crp-ms=999999 exehead.tmp"
 ShowInstDetails show
 ShowUninstDetails show
 
