@@ -119,9 +119,8 @@ Section -AppDataFiles
 
     ; Batch files
     SetOutPath "$INSTDIR"
-    File /oname=irssi_cygterm.cmd "${EXTRA_SHARED}\irssi_win2k_cygterm.cmd"
-    File /oname=irssi.cmd" "${EXTRA_SHARED}\irssi_win2k.cmd"
-    File /r /x .svn "${EXTRA_SHARED}\bin"
+    File /oname=irssi_cygterm.cmd "${EXTRA_INSTALLER}\irssi_win2k_cygterm.cmd"
+    File /oname=irssi.cmd" "${EXTRA_INSTALLER}\irssi_win2k.cmd"
     File /r /x .svn "${EXTRA_INSTALLER}\bin"
     Goto ANY_WINDOWS
 
@@ -131,8 +130,8 @@ Section -AppDataFiles
     File "${SRC_DIR}\startup"
 
     ; Batch files
-    File /oname=irssi.bat "${EXTRA_SHARED}\irssi_win9x.bat"
-    File /oname=irssi_cygterm.bat "${EXTRA_SHARED}\irssi_win9x_cygterm.bat"
+    File /oname=irssi.bat "${EXTRA_SHARED}\irssi.bat"
+    File /oname=irssi_cygterm.bat "${EXTRA_SHARED}\irssi_cygterm.bat"
 
   ANY_WINDOWS:
 SectionEnd
@@ -242,7 +241,7 @@ Section -InstallEssentials
 
   File "${EXTRA_SHARED}\gpl-2.0.txt"
   File "${EXTRA_INSTALLER}\irssi.ico"
-  File "${EXTRA_INSTALLER}\README.txt"
+  File "${EXTRA_SHARED}\README.txt"
   WriteUninstaller "$INSTDIR\${APP_UNINST_FILE}"
 
   WriteRegStr ${APP_REG_ROOT} "${APP_REG_INSTALLER}" "${APP_REG_INSTDIR_VALUE}" $INSTDIR
