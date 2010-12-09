@@ -15,9 +15,9 @@
 Introduction
 ~~~
 
-Thank you for downloading irssi-win32-0.8.12.
+Thank you for downloading irssi-win32-0.8.15.
 
-This package includes Perl scripting support, as well as the 20071011 release of PuTTYcyg.
+This package includes Perl scripting support, as well as the 20101029 release of PuTTYcyg.
 
 
 Credits
@@ -29,7 +29,7 @@ This package is a modified, updated version of the irssi-win32-0.8.10 package as
 
 This README is based on Nei's informative original README, which is included below.
 
-The irssi-win32-0.8.12 binary included in this package was compiled under Cygwin and assembled by Josh Dick.
+The irssi-win32-0.8.15 binary included in this package was compiled under Cygwin and assembled by Josh Dick.
 The NSIS installer script for this package was created by Sebastian Pipping and Josh Dick. 
 
 This package was made possible by:
@@ -48,21 +48,24 @@ Enjoy!
 Build Instructions
 ~~~
 
-If you wish to compile Irssi 0.8.12 for Windows yourself, here are build instructions:
+If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instructions:
 
 	1) Install Cygwin (available at http://cygwin.com), adding the following packages to the default configuration:
-		a. Devel/gcc-core
-		b. Devel/gcc-g++
-		c. Devel/gettext
-		d. Devel/gettext-devel (missing libintl.a)
-		e. Devel/libncurses-devel (terminfo support)
-		f. Devel/make
-		g. Devel/pkgconfig (detects glib2)
-		h. Interpreters/perl
-		i. Libs/glib2
-		j. Libs/glib2-devel
-		k. Libs/openssl
-		l. Libs/openssl-devel
+		Devel/gcc4
+		Devel/gcc-core
+		Devel/gcc-g++
+		Devel/gettext
+		Devel/gettext-devel (missing libintl.a)
+		Devel/libncurses-devel (terminfo support)
+		Devel/make
+		Devel/pkgconfig (detects glib2)
+		Devel/zlib-devel
+		Interpreters/perl
+		Libs/glib2.0
+		Libs/libglib2.0_0
+		Libs/libglib2.0-devel
+		Libs/openssl098
+		Libs/openssl-devel
 		   
 	2) Download the irssi source code from http://irssi.org and save it to C:/cygwin/home/<username>
 	
@@ -81,9 +84,15 @@ If you wish to compile Irssi 0.8.12 for Windows yourself, here are build instruc
 			
 	4) Now you can start irssi with C:/irssi/bin/irssi.exe from inside the Cygwin terminal.
 	
-	5) If you didn't opt for Perl support, skip to step 6. If you did opt for Perl support, and you want to distribute your compiled binary, you can copy the /lib/perl5/5.8 folder from your Cygwin installation into the corresponding folder of your irssi directory tree, overwriting everything inside the existing 5.8 directory, and then move the contents of irssi/lib/perl5/5.8/cygwin into irssi/lib/perl/5.8, overwriting files that are already there. You can delete the now-empty 'cygwin' directory inside irssi/lib/perl5/5.8.
+	5) If you didn't opt for Perl support, skip to step 6. If you did opt for Perl support, and you want to distribute your compiled binary, you can copy/merge the contents of the /lib/perl5/5.10 folder from your Cygwin installation into the corresponding folder in your irssi directory tree (irssi/lib/perl5/5.10).
 
-	6) Copy the batch files, terminfo folder, and startup file included in this package to the root of your irssi directory tree. Appropriate Cygwin DLLs and PuTTYcyg need to be copied to the /bin directory of your irssi directory tree in order for irssi to be distributable and to work with the batch files and command scripts included in this package.
+	6) Copy these things to your irssi root directory:
+		
+		a. Batch files included in this package
+		b. 'startup' file included in this package
+		c. The /usr/share/terminfo folder from your Cygwin installation
+
+	Note that appropriate Cygwin DLLs and PuTTYcyg need to be copied to irssi/bin in order for irssi to be distributable and to work with the batch files and command scripts included in this package.
 
 
 Old README

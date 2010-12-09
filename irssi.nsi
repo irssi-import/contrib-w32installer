@@ -19,11 +19,11 @@
 !include "${EXTRA_INSTALLER}\RequireVersion.nsh"
 !insertmacro REQUIRE_VERSION "2.34"
 
-!define APP_VER_FULL "0.8.12"
-!define APP_VER_INFO "0.8.12.1"
-!define APP_VER_FILE "0_8_12"
-!define APP_PKG_RELEASE "2"
-!define SRC_DIR "irssi-win32-0.8.12"
+!define APP_VER_FULL "0.8.15"
+!define APP_VER_INFO "0.8.15.1"
+!define APP_VER_FILE "0_8_15"
+!define APP_PKG_RELEASE "1"
+!define SRC_DIR "irssi-win32-0.8.15"
 !define EXTRA_SHARED "shared"
 
 !define APP_NAME_FULL "Irssi Console IRC Client"
