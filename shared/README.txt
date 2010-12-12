@@ -12,37 +12,29 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+
 Introduction
 ~~~
 
-Thank you for downloading irssi-win32-0.8.15.
+Thank you for using irssi-win32-0.8.15.
 
 This package includes Perl scripting support, as well as the 20101029 release of PuTTYcyg.
 
 
-Credits
+
+Important Usage Information
 ~~~
 
-This package is a modified, updated version of the irssi-win32-0.8.10 package assembled by Nei, available at
-	
-	http://anti.teamidiot.de/nei/2007/01/irssi_0810_for_windows_cygwinw/index.html
+When running Irssi for Windows, Irssi's /help and /away commands may exhibit strange behavior.
 
-This README is based on Nei's informative original README, which is included below.
+To restore the full functionality of these commands, run the following Irssi commands:
 
-The irssi-win32-0.8.15 binary included in this package was compiled under Cygwin and assembled by Josh Dick.
-The NSIS installer script for this package was created by Sebastian Pipping and Josh Dick. 
+	/set awaylog_file ~/.irssi/away.log
+	/set help_path share/irssi/help
+	/save
 
-This package was made possible by:
-	The Irssi team (http://www.irssi.org/)
-	#irssi at IRCnet (irc://open.ircnet.net/#irssi),
-	Cygwin (http://www.cygwin.com),
-	NSIS (http://nsis.sourceforge.net),
-	and of course, Nei (http://anti.teamidiot.de/nei/2007/01/irssi_0810_for_windows_cygwinw/index.html).
+You only have to run these commands once after starting from a fresh/default Irssi configuration.
 
-Enjoy!
-
--Josh Dick <josh@joshdick.net>
--Sebastian Pipping <webmaster@hartwork.org>
 
 
 Build Instructions
@@ -67,7 +59,7 @@ If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instruc
 		Libs/openssl098
 		Libs/openssl-devel
 		   
-	2) Download the irssi source code from http://irssi.org and save it to C:/cygwin/home/<username>
+	2) Download the Irssi source code from http://irssi.org and save it to C:/cygwin/home/<username>
 	
 	3) Open a Cygwin terminal, and run the following commands:
 		tar xzvf irssi-*.tar.gz
@@ -82,17 +74,44 @@ If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instruc
 		make
 		make install
 			
-	4) Now you can start irssi with C:/irssi/bin/irssi.exe from inside the Cygwin terminal.
+	4) Now you can start Irssi with C:/irssi/bin/irssi.exe from inside the Cygwin terminal.
 	
-	5) If you didn't opt for Perl support, skip to step 6. If you did opt for Perl support, and you want to distribute your compiled binary, you can copy/merge the contents of the /lib/perl5/5.10 folder from your Cygwin installation into the corresponding folder in your irssi directory tree (irssi/lib/perl5/5.10).
+	5) If you didn't opt for Perl support, skip to step 6. If you did opt for Perl support, and you want to distribute your compiled binary, you can copy/merge the contents of the /lib/perl5/5.10 folder from your Cygwin installation into the corresponding folder in your Irssi directory tree (irssi/lib/perl5/5.10).
 
-	6) Copy these things to your irssi root directory:
+	6) Copy these things to your Irssi root directory:
 		
 		a. Batch files included in this package
 		b. 'startup' file included in this package
 		c. The /usr/share/terminfo folder from your Cygwin installation
 
-	Note that appropriate Cygwin DLLs and PuTTYcyg need to be copied to irssi/bin in order for irssi to be distributable and to work with the batch files and command scripts included in this package.
+	Note that appropriate Cygwin DLLs and PuTTYcyg need to be copied to irssi/bin in order for Irssi to be distributable and to work with the batch files and command scripts included in this package.
+
+
+
+Credits
+~~~
+
+This package is a modified, updated version of the irssi-win32-0.8.10 package assembled by Nei, available at
+	
+	http://anti.teamidiot.de/nei/2007/01/irssi_0810_for_windows_cygwinw/index.html
+
+This README is based on Nei's informative original README, which is included below.
+
+The Irssi binary included in this package was compiled under Cygwin and assembled by Josh Dick.
+The NSIS installer script for this package was created by Sebastian Pipping and Josh Dick. 
+
+This package was made possible by:
+	The Irssi team (http://www.irssi.org/)
+	#irssi at IRCnet (irc://open.ircnet.net/#irssi),
+	Cygwin (http://www.cygwin.com),
+	NSIS (http://nsis.sourceforge.net),
+	and of course, Nei (http://anti.teamidiot.de/nei/2007/01/irssi_0810_for_windows_cygwinw/index.html).
+
+Enjoy!
+
+-Josh Dick <josh@joshdick.net>
+-Sebastian Pipping <webmaster@hartwork.org>
+
 
 
 Old README

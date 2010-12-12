@@ -1,5 +1,5 @@
 ; NSIS installer script for Irssi
-; Copyright (C) 2008, Joshua Dick <josh@joshdick.net>
+; Copyright (C) 2008-2010, Joshua Dick <josh@joshdick.net>
 ; Copyright (C) 2008, Sebastian Pipping <webmaster@hartwork.org>
 ;
 ; This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 !include "${EXTRA_INSTALLER}\RequireVersion.nsh"
 !insertmacro REQUIRE_VERSION "2.34"
 
-!define APP_VER_FULL "0.8.15"
+!define APP_VER_FULL "0.8.15-TEST1"
 !define APP_VER_INFO "0.8.15.1"
 !define APP_VER_FILE "0_8_15"
 !define APP_PKG_RELEASE "1"
@@ -107,6 +107,22 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${APP_NAME_FULL}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${APP_VER_INFO}"
 VIProductVersion "${APP_VER_INFO}"
 
+; Check for a previous installation and prompt the user to remove it
+Function .onInit
+  ReadRegStr $R0 "${APP_UNINST_ROOT}" "${APP_UNINST_KEY}" "UninstallString"
+  StrCmp $R0 "" done
+ 
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+  "Another version of Irssi is already installed and must be removed before installing this \
+  version.$\n$\nClick 'OK' to start its uninstaller or 'Cancel' to cancel this installation." \
+  IDOK uninst
+  Abort
+ 
+; Run the uninstaller
+uninst:
+  Exec $INSTDIR\Uninstall.exe
+done:
+ FunctionEnd
 
 Section -AppDataFiles
   Version::IsWindowsPlatform9x
@@ -183,10 +199,10 @@ Section -StartMenuEntry
     CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT} (in Cygterm).lnk" "$INSTDIR\irssi_cygterm.bat" "" "$INSTDIR\irssi.ico"
 
   ANY_WINDOWS:
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.txt"
-  WriteINIStr "$SMPROGRAMS\$StartMenuFolder\Website.url" "InternetShortcut" "URL" "http://www.irssi.org/"
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\${APP_UNINST_FILE}"
-  !insertmacro MUI_STARTMENU_WRITE_END
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.txt"
+    WriteINIStr "$SMPROGRAMS\$StartMenuFolder\Website.url" "InternetShortcut" "URL" "http://www.irssi.org/"
+    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\${APP_UNINST_FILE}"
+    !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section un.StartMenuEntry
@@ -245,6 +261,14 @@ Section -InstallEssentials
   WriteUninstaller "$INSTDIR\${APP_UNINST_FILE}"
 
   WriteRegStr ${APP_REG_ROOT} "${APP_REG_INSTALLER}" "${APP_REG_INSTDIR_VALUE}" $INSTDIR
+  
+  MessageBox MB_YESNO \
+    "Installation complete!$\n$\nIt is HIGHLY RECOMMENDED that you follow the instructions in the \
+	'Important Usage Information' section of README.txt to ensure that several Irssi features \
+	will work properly.$\n$\nOpen README.txt now?" \
+  IDNO skipreadme
+  ExecShell "open" "$INSTDIR\README.txt"
+  skipreadme:
 SectionEnd
 
 Section un.InstallEssentials
