@@ -25,12 +25,13 @@ This package includes Perl scripting support, as well as the 20101029 release of
 Important Usage Information
 ~~~
 
-When running Irssi for Windows, Irssi's /help and /away commands may exhibit strange behavior.
+When running Irssi for Windows, Irssi's Perl functionality, /help and /away commands may exhibit strange behavior.
 
-To restore the full functionality of these commands, run the following Irssi commands:
+To restore ensure that this functionality works properly, run the following Irssi commands:
 
 	/set awaylog_file ~/.irssi/away.log
 	/set help_path share/irssi/help
+	/set perl_use_lib lib/perl5/5.10/i686-cygwin
 	/save
 
 You only have to run these commands once after starting from a fresh/default Irssi configuration.
