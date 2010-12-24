@@ -17,9 +17,9 @@
 
 !define EXTRA_INSTALLER "installer"
 !include "${EXTRA_INSTALLER}\RequireVersion.nsh"
-!insertmacro REQUIRE_VERSION "2.34"
+!insertmacro REQUIRE_VERSION "2.35"
 
-!define APP_VER_FULL "0.8.15-TEST1"
+!define APP_VER_FULL "0.8.15-TEST2"
 !define APP_VER_INFO "0.8.15.1"
 !define APP_VER_FILE "0_8_15"
 !define APP_PKG_RELEASE "1"
@@ -60,6 +60,9 @@ Name "${APP_NAME_FULL} ${APP_VER_FULL}"
 OutFile "${APP_NAME_FILE}_${APP_VER_FILE}_setup_${APP_PKG_RELEASE}.exe"
 InstallDir "${APP_INSTDIR_DEFAULT}"
 InstallDirRegKey "${APP_REG_ROOT}" "${APP_REG_INSTALLER}" "${APP_REG_INSTDIR_VALUE}"
+
+; This ensures that the Start menu is correctly manipulated inside Windows Vista/Windows 7
+RequestExecutionLevel user
 
 !addplugindir "${EXTRA_INSTALLER}"
 !include "MUI2.nsh"
