@@ -27,7 +27,7 @@ Important Usage Information
 
 When running Irssi for Windows, Irssi's Perl functionality, /help and /away commands may exhibit strange behavior.
 
-To restore ensure that this functionality works properly, run the following Irssi commands:
+To ensure that this functionality works properly, run the following Irssi commands:
 
 	/set awaylog_file ~/.irssi/away.log
 	/set help_path share/irssi/help
