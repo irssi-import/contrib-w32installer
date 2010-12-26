@@ -19,7 +19,7 @@
 !include "${EXTRA_INSTALLER}\RequireVersion.nsh"
 !insertmacro REQUIRE_VERSION "2.35"
 
-!define APP_VER_FULL "0.8.15-TEST2"
+!define APP_VER_FULL "0.8.15-TEST3"
 !define APP_VER_INFO "0.8.15.1"
 !define APP_VER_FILE "0_8_15"
 !define APP_PKG_RELEASE "1"
@@ -61,8 +61,7 @@ OutFile "${APP_NAME_FILE}_${APP_VER_FILE}_setup_${APP_PKG_RELEASE}.exe"
 InstallDir "${APP_INSTDIR_DEFAULT}"
 InstallDirRegKey "${APP_REG_ROOT}" "${APP_REG_INSTALLER}" "${APP_REG_INSTDIR_VALUE}"
 
-; This ensures that the Start menu is correctly manipulated inside Windows Vista/Windows 7
-RequestExecutionLevel user
+RequestExecutionLevel admin
 
 !addplugindir "${EXTRA_INSTALLER}"
 !include "MUI2.nsh"
@@ -110,22 +109,65 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${APP_NAME_FULL}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${APP_VER_INFO}"
 VIProductVersion "${APP_VER_INFO}"
 
-; Check for a previous installation and prompt the user to remove it
 Function .onInit
-  ReadRegStr $R0 "${APP_UNINST_ROOT}" "${APP_UNINST_KEY}" "UninstallString"
-  StrCmp $R0 "" done
+
+  ClearErrors
+  UserInfo::GetName ; If this fails, we don't have to be running as an administrator (Windows 9x, etc.)
+  IfErrors adminCheckDone
+
+  ; The following usage of the userinfo plugin was found at http://nsis.sourceforge.net/Simple_tutorials#Check_if_user_is_administrator
+  
+  ; call userInfo plugin to get user info.  The plugin puts the result in the stack.
+  userInfo::getAccountType 
+  ; Pop the result from the stack into $0.
+  pop $0
+  ; Compare the result with the string "Admin" to see if the user is admin.
+  ; If there's a match, jump to 'checksFinished'.
+  strCmp $0 "Admin" adminCheckDone
  
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  "Another version of Irssi is already installed and must be removed before installing this \
-  version.$\n$\nClick 'OK' to start its uninstaller or 'Cancel' to cancel this installation." \
-  IDOK uninst
+  ; If there is not a match, print message and abort
+  messageBox MB_OK "The Irssi installer must be run as a user with administrator privileges."
   Abort
+
+  adminCheckDone:
+  
+    ; Check for a previous installation and prompt the user to remove it  
+    ReadRegStr $R0 "${APP_UNINST_ROOT}" "${APP_UNINST_KEY}" "UninstallString"
+    StrCmp $R0 "" previousCheckDone
  
-; Run the uninstaller
-uninst:
-  Exec $INSTDIR\Uninstall.exe
-done:
- FunctionEnd
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+    "Another version of Irssi is already installed and must be removed before installing this \
+    version.$\n$\nClick 'OK' to start its uninstaller or 'Cancel' to cancel this installation."
+    Exec $INSTDIR\Uninstall.exe
+    Abort
+  
+    previousCheckDone:
+  
+FunctionEnd
+
+Function un.onInit
+
+  ClearErrors
+  UserInfo::GetName ; If this fails, we don't have to be running as an administrator (Windows 9x, etc.)
+  IfErrors adminCheckDone
+
+  ; The following usage of the userinfo plugin was found at http://nsis.sourceforge.net/Simple_tutorials#Check_if_user_is_administrator
+  
+  ; call userInfo plugin to get user info.  The plugin puts the result in the stack.
+  userInfo::getAccountType 
+  ; Pop the result from the stack into $0.
+  pop $0
+  ; Compare the result with the string "Admin" to see if the user is admin.
+  ; If there's a match, jump to 'checksFinished'.
+  strCmp $0 "Admin" adminCheckDone
+ 
+  ; If there is not a match, print message and abort
+  messageBox MB_OK "The Irssi uninstaller must be run as a user with administrator privileges."
+  Abort
+
+  adminCheckDone:
+  
+FunctionEnd
 
 Section -AppDataFiles
   Version::IsWindowsPlatform9x
@@ -187,6 +229,8 @@ Section un.AppDataFiles
 SectionEnd
 
 Section -StartMenuEntry
+  SetShellVarContext all ; Need to create shortcuts in the 'all users' folder
+  
   !insertmacro MUI_STARTMENU_WRITE_BEGIN ${APP_START_MENU_PAGE_ID}
   Version::IsWindowsPlatform9x
   Pop $Win9x
@@ -209,6 +253,8 @@ Section -StartMenuEntry
 SectionEnd
 
 Section un.StartMenuEntry
+  SetShellVarContext all ; Need to remove shortcuts the shortcuts from the 'all users' folder
+
   !insertmacro MUI_STARTMENU_GETFOLDER "${APP_START_MENU_PAGE_ID}" $StartMenuFolder
   ; NOTE: The check below must stay in until we have a way to prevent
   ; compilation of this script with NSIS versions prior to 2.35 .
