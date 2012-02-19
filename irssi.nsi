@@ -19,14 +19,14 @@
 !include "${EXTRA_INSTALLER}\RequireVersion.nsh"
 !insertmacro REQUIRE_VERSION "2.35"
 
-!define APP_VER_FULL "0.8.15-TEST3"
+!define APP_VER_FULL "0.8.15-TEST4"
 !define APP_VER_INFO "0.8.15.1"
 !define APP_VER_FILE "0_8_15"
 !define APP_PKG_RELEASE "1"
 !define SRC_DIR "irssi-win32-0.8.15"
 !define EXTRA_SHARED "shared"
 
-!define APP_NAME_FULL "Irssi Console IRC Client"
+!define APP_NAME_FULL "Irssi"
 !define APP_NAME_SHORT "Irssi"
 !define APP_NAME_FILE "irssi"
 !define APP_AUTHOR "Irssi Team"
@@ -79,7 +79,6 @@ RequestExecutionLevel admin
 !define MUI_INSTFILESPAGE_PROGRESSBAR
 !define APP_START_MENU_PAGE_ID "StartMenuPage"
 
-var Win9x
 var StartMenuFolder
 var CygwinFolder
 
@@ -122,7 +121,7 @@ Function .onInit
   ; Pop the result from the stack into $0.
   pop $0
   ; Compare the result with the string "Admin" to see if the user is admin.
-  ; If there's a match, jump to 'checksFinished'.
+  ; If there's a match, jump to 'adminCheckDone'.
   strCmp $0 "Admin" adminCheckDone
  
   ; If there is not a match, print message and abort
@@ -170,86 +169,42 @@ Function un.onInit
 FunctionEnd
 
 Section -AppDataFiles
-  Version::IsWindowsPlatform9x
-  Pop $Win9x
 
-  StrCmp $Win9x "1" OLD_WINDOWS
-    ; Startup script
-    SetOutPath "$APPDATA\${APP_NAME_SHORT}"
-    File "${SRC_DIR}\startup"
+  ; Startup script
+  SetOutPath "$APPDATA\${APP_NAME_SHORT}"
+  File "${EXTRA_SHARED}\startup"
 
-    ; Batch files
-    SetOutPath "$INSTDIR"
-    File /oname=irssi_cygterm.cmd "${EXTRA_INSTALLER}\irssi_win2k_cygterm.cmd"
-    File /oname=irssi.cmd" "${EXTRA_INSTALLER}\irssi_win2k.cmd"
-    File /r /x .svn "${EXTRA_INSTALLER}\bin"
-    Goto ANY_WINDOWS
+  ; Batch files
+  SetOutPath "$INSTDIR"
+  File /r /x .svn "${EXTRA_INSTALLER}\bin"
 
-  OLD_WINDOWS:
-    ; Startup script
-    SetOutPath "$INSTDIR"
-    File "${SRC_DIR}\startup"
-
-    ; Batch files
-    File /oname=irssi.bat "${EXTRA_SHARED}\irssi.bat"
-    File /oname=irssi_cygterm.bat "${EXTRA_SHARED}\irssi_cygterm.bat"
-
-  ANY_WINDOWS:
 SectionEnd
 
 Section un.AppDataFiles
-  Version::IsWindowsPlatform9x
-  Pop $Win9x
 
-  StrCmp $Win9x "1" OLD_WINDOWS
-    ; Startup script and config
-    MessageBox MB_YESNO|MB_DEFBUTTON2 "${MSG_REMOVE_CONFIG}" 0 KEEP_NEW_WINDOWS
-      Delete "$APPDATA\${APP_NAME_SHORT}\startup"
-      Delete "$APPDATA\${APP_NAME_SHORT}\config"
-      RMDir "$APPDATA\${APP_NAME_SHORT}"
-    KEEP_NEW_WINDOWS:
-
-    ; Batch files
-    Delete "$INSTDIR\irssi.cmd"
-    Delete "$INSTDIR\irssi_cygterm.cmd"
-    Goto ANY_WINDOWS
-    
-  OLD_WINDOWS:
-    ; Startup script and config
-    MessageBox MB_YESNO|MB_DEFBUTTON2 "${MSG_REMOVE_CONFIG}" 0 KEEP_OLD_WINDOWS
-      Delete "$INSTDIR\startup"
-      Delete "$INSTDIR\config"
-    KEEP_OLD_WINDOWS:
-
-    ; Batch files
-    Delete "$INSTDIR\irssi.bat"
-    Delete "$INSTDIR\irssi_cygterm.bat"
-
-  ANY_WINDOWS:
+  ; Startup script and config
+  MessageBox MB_YESNO|MB_DEFBUTTON2 "${MSG_REMOVE_CONFIG}" IDNO KEEP_CONFIG_DATA
+    Delete "$APPDATA\${APP_NAME_SHORT}\startup"
+    Delete "$APPDATA\${APP_NAME_SHORT}\config"
+    Delete "$APPDATA\${APP_NAME_SHORT}\default.theme"
+    RMDir "$APPDATA\${APP_NAME_SHORT}"
+	
+  KEEP_CONFIG_DATA:
 SectionEnd
 
 Section -StartMenuEntry
   SetShellVarContext all ; Need to create shortcuts in the 'all users' folder
   
   !insertmacro MUI_STARTMENU_WRITE_BEGIN ${APP_START_MENU_PAGE_ID}
-  Version::IsWindowsPlatform9x
-  Pop $Win9x
 
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  StrCmp $Win9x "1" OLD_WINDOWS
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT}.lnk" "$INSTDIR\irssi.cmd" "" "$INSTDIR\irssi.ico"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT} (in Cygterm).lnk" "$INSTDIR\irssi_cygterm.cmd" "" "$INSTDIR\irssi.ico"
-    Goto ANY_WINDOWS
-
-  OLD_WINDOWS:
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT}.lnk" "$INSTDIR\irssi.bat" "" "$INSTDIR\irssi.ico"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT} (in Cygterm).lnk" "$INSTDIR\irssi_cygterm.bat" "" "$INSTDIR\irssi.ico"
-
-  ANY_WINDOWS:
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.txt"
-    WriteINIStr "$SMPROGRAMS\$StartMenuFolder\Website.url" "InternetShortcut" "URL" "http://www.irssi.org/"
-    CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\${APP_UNINST_FILE}"
-    !insertmacro MUI_STARTMENU_WRITE_END
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME_SHORT}.lnk" "$INSTDIR\bin\irssi.vbs" "" "$INSTDIR\irssi.ico"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.txt"
+  WriteINIStr "$SMPROGRAMS\$StartMenuFolder\Website.url" "InternetShortcut" "URL" "http://www.irssi.org/"
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\${APP_UNINST_FILE}"
+  
+  !insertmacro MUI_STARTMENU_WRITE_END
+  
 SectionEnd
 
 Section un.StartMenuEntry
@@ -324,7 +279,7 @@ Section un.InstallEssentials
   RMDir /r "$INSTDIR\bin"
   RMDir /r "$INSTDIR\lib"
   RMDir /r "$INSTDIR\share"
-  RMDir /r "$INSTDIR\terminfo"
+  RMDir /r "$INSTDIR\usr"
 
   Delete "$INSTDIR\gpl-2.0.txt"
   Delete "$INSTDIR\irssi.ico"

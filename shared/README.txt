@@ -18,7 +18,7 @@ Introduction
 
 Thank you for using irssi-win32-0.8.15.
 
-This package includes Perl scripting support, as well as the 20101029 release of PuTTYcyg.
+This package includes Perl scripting support, as well as mintty 1.0.3.
 
 
 
@@ -36,6 +36,9 @@ To ensure that this functionality works properly, run the following Irssi comman
 
 You only have to run these commands once after starting from a fresh/default Irssi configuration.
 
+Note that you currently cannot quit Irssi by clicking the mintty window's "X" icon.
+This is because mintty sends the SIGHUP signal when the "X" is clicked, and Irssi reloads its configuration when it receives SIGHUP (this is as designed).
+Instead, please quit Irssi by using its built-in /quit command.
 
 
 Build Instructions
@@ -44,6 +47,7 @@ Build Instructions
 If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instructions:
 
 	1) Install Cygwin (available at http://cygwin.com), adding the following packages to the default configuration:
+
 		Devel/gcc4
 		Devel/gcc-core
 		Devel/gcc-g++
@@ -51,18 +55,19 @@ If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instruc
 		Devel/gettext-devel (missing libintl.a)
 		Devel/libncurses-devel (terminfo support)
 		Devel/make
-		Devel/pkgconfig (detects glib2)
+		Devel/pkg-config (detects glib2)
 		Devel/zlib-devel
 		Interpreters/perl
 		Libs/glib2.0
 		Libs/libglib2.0_0
 		Libs/libglib2.0-devel
-		Libs/openssl098
+		Libs/libopenssl098
 		Libs/openssl-devel
 		   
 	2) Download the Irssi source code from http://irssi.org and save it to C:/cygwin/home/<username>
 	
 	3) Open a Cygwin terminal, and run the following commands:
+
 		tar xzvf irssi-*.tar.gz
 		cd ./irssi-*
 
@@ -79,13 +84,14 @@ If you wish to compile Irssi 0.8.15 for Windows yourself, here are build instruc
 	
 	5) If you didn't opt for Perl support, skip to step 6. If you did opt for Perl support, and you want to distribute your compiled binary, you can copy/merge the contents of the /lib/perl5/5.10 folder from your Cygwin installation into the corresponding folder in your Irssi directory tree (irssi/lib/perl5/5.10).
 
-	6) Copy these things to your Irssi root directory:
+	6) Copy:
 		
-		a. Batch files included in this package
-		b. 'startup' file included in this package
-		c. The /usr/share/terminfo folder from your Cygwin installation
+		a. The .cmd and .vbs files included in this package to your irssi\bin directory
+		b. The 'startup' file included in this package to your irssi root directory
+		c. The \usr\share\terminfo directory from your Cygwin installation to your Irssi root directory,
+		   so that the Irssi root directory contains its own usr\share\terminfo directory
 
-	Note that appropriate Cygwin DLLs and PuTTYcyg need to be copied to irssi/bin in order for Irssi to be distributable and to work with the batch files and command scripts included in this package.
+	Note that appropriate Cygwin DLLs and mintty need to be copied to irssi\bin in order for Irssi to be distributable.
 
 
 
